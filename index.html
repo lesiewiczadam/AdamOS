@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="theme-color" content="#071426">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AdamOS">
+<meta name="adamos-version" content="1.1.1">
+<title>AdamOS • My Life 1.2.5</title>
+<style>
+:root{
+ --bg:#061326;--panel:#0e2442;--panel2:#132f53;--text:#fff;--muted:#bed0e4;
+ --accent:#e53935;--line:#315274;--input:#071a31;--shadow:#0007;
+ --font:20px;--weight:700;--gap:12px;--btn:54px;--icon:28px;
+}
+[data-theme="light"]{--bg:#edf2f8;--panel:#fff;--panel2:#f2f6fb;--text:#09182b;--muted:#52677d;--line:#b8c7d8;--input:#fff;--shadow:#35506a22}
+[data-theme="contrast"]{--bg:#000;--panel:#000;--panel2:#111;--text:#fff;--muted:#fff;--line:#fff;--input:#000;--accent:#ff3030;--shadow:#000}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,var(--bg),color-mix(in srgb,var(--bg) 78%,#163c68));color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;font-size:var(--font);font-weight:var(--weight);line-height:1.4;min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;color:#fff;background:#17385f;border:2px solid #47729f;border-radius:16px;padding:12px;font-weight:900;min-height:var(--btn)}
+input,select,textarea{width:100%;background:var(--input);color:var(--text);border:2px solid var(--line);border-radius:14px;padding:12px;min-height:52px}
+textarea{min-height:100px;resize:vertical}
+.app{max-width:980px;margin:auto;padding:calc(14px + env(safe-area-inset-top)) 12px calc(105px + env(safe-area-inset-bottom))}
+.top{background:linear-gradient(135deg,#0d2a4f,#11223c);border:1px solid #315274;border-radius:24px;padding:18px;box-shadow:0 12px 34px var(--shadow);color:#fff}
+.brand{display:flex;justify-content:space-between;gap:12px;align-items:start}
+h1{font-size:2em;margin:0;letter-spacing:.4px}h2{font-size:1.45em;margin:0 0 12px}h3{margin:18px 0 10px}
+.tag,.muted,.small{color:var(--muted)}.small{font-size:.85em}.date{font-weight:900;margin-top:8px}
+.search,.row,.grid{display:grid;gap:var(--gap)}.search{grid-template-columns:1fr auto;margin-top:14px}.row{grid-template-columns:1fr 1fr}.grid{grid-template-columns:repeat(2,1fr)}
+.modules{margin-top:14px}.tile{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:21px;padding:17px;text-align:left;display:flex;flex-direction:column;gap:7px;min-height:132px}.tile .ico{font-size:var(--icon)}.tile span:last-child{font-size:.84em;color:var(--muted)}
+.card{margin-top:14px;background:linear-gradient(160deg,var(--panel),color-mix(in srgb,var(--panel) 88%,#234a75));border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 8px 24px var(--shadow)}
+.metric{background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:14px}.metric span{display:block;font-size:.75em;color:var(--muted)}.metric b{font-size:1.35em}
+.item{background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:9px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.actions button{min-height:44px;padding:8px 12px}
+.red{background:#9e1f22;border-color:#e15b5e}.ghost{background:transparent;color:var(--text);border-color:var(--line)}.white{background:#fff;color:#071426;border:3px solid var(--accent)}
+.screen{display:none!important;opacity:1!important;transform:none!important;animation:none!important}.screen.active{display:block!important;opacity:1!important;transform:none!important;animation:none!important}.hidden{display:none!important}
+}
+button{transition:transform .12s ease,filter .12s ease,box-shadow .12s ease}button:active{transform:scale(.98);filter:brightness(1.08)}
+.progress{height:18px;background:#06101e;border-radius:999px;overflow:hidden;border:1px solid var(--line)}.bar{height:100%;background:linear-gradient(90deg,#fff,var(--accent));width:0}
+.nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(16px);padding:8px 8px calc(8px + env(safe-area-inset-bottom));border-top:1px solid var(--line);z-index:20}.nav button{background:transparent;border:0;min-height:64px;padding:6px;color:var(--text);font-size:.72em}.nav i{display:block;font-style:normal;font-size:24px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.daycell{min-height:76px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:6px;font-size:.75em}.daycell b{font-size:1.1em}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-right:4px}
+.work-card{border:2px solid var(--line);padding:16px;margin-top:14px}
+.work-card.today-work{outline:4px solid var(--accent)}
+.field-label{display:block;font-size:.86em;color:var(--muted);font-weight:900;margin:10px 0 5px}
+.work-live{margin-top:12px;background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:12px}
+.work-live b{font-size:1.2em}
+.work-alert{margin-top:12px;border:2px solid var(--accent);border-radius:14px;padding:12px;background:color-mix(in srgb,var(--accent) 14%,var(--panel2))}
+.work-ok{border-color:#6ca0d8;background:var(--panel2)}
+.system-hours{margin-top:14px;background:var(--panel2);border:2px solid var(--line);border-radius:18px;padding:14px}
+.balance-positive{font-size:1.25em;color:#fff}
+.balance-negative{font-size:1.25em;color:#ffb2b2}
+.quick-work{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.default-shift{background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:12px}
+
+.lock-screen{position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 50% 20%,#153d69 0,#071426 48%,#030b15 100%);display:flex;align-items:center;justify-content:center;padding:22px}
+.lock-panel{width:min(440px,100%);background:linear-gradient(180deg,#102d4f,#081b31);border:1px solid #a9bed3;border-radius:28px;padding:24px;box-shadow:0 0 0 1px #5f86aa55,0 0 34px #4b9be966,0 24px 70px #000b;text-align:center}
+.lock-logo{font-size:2.15em;font-weight:950;letter-spacing:.5px}.lock-sub{color:#bed0e4;margin:3px 0 18px}
+.pin-dots{display:flex;justify-content:center;gap:12px;margin:16px 0}.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid #d8e6f3;background:transparent}.pin-dot.on{background:#fff;box-shadow:0 0 12px #5caeff}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.pin-pad button{font-size:1.25em;min-height:62px;background:#14395f}
+.lock-message{min-height:28px;color:#ffd7d7;margin-top:10px}.security-card{border:1px solid #a9bed3;box-shadow:0 0 20px #4b9be933}
+.security-status{display:flex;align-items:center;gap:9px}.security-dot{width:12px;height:12px;border-radius:50%;background:#e53935;box-shadow:0 0 10px #e53935}.security-dot.on{background:#4fd28c;box-shadow:0 0 10px #4fd28c}
+
+.onehand .app{max-width:680px;margin-right:0}.compact .secondary{display:none}
+.version-badge{display:inline-block;margin-top:7px;padding:5px 10px;border:1px solid #6f94bb;border-radius:999px;background:#071a31;font-size:.72em;color:#fff}
+.update-box{border:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--panel2));border-radius:18px;padding:14px;margin-top:14px}
+.modal{position:fixed;inset:0;background:#000b;z-index:100;display:flex;align-items:center;justify-content:center;padding:18px}
+.modal-card{width:min(620px,100%);max-height:88dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--panel);border:3px solid var(--accent);border-radius:24px;padding:0;box-shadow:0 18px 60px #000}.modal-head{padding:18px 20px 10px}.modal-scroll{overflow:auto;padding:0 20px 14px;-webkit-overflow-scrolling:touch}.modal-card .modal-actions{position:sticky;bottom:0;background:var(--panel);padding:12px 20px calc(14px + env(safe-area-inset-bottom));margin:0;border-top:1px solid var(--line)}
+.modal-card h2{margin:0}.release-meta{margin-top:6px;color:var(--muted);font-size:.82em}.changelog{list-style:none;padding:0}.changelog li{margin:10px 0;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--panel2)}.changelog li::before{content:"✓ ";font-weight:900}.system-ok{border:2px solid #6ca0d8;background:var(--panel2)}.history-entry{border-left:5px solid var(--accent);padding-left:14px}.status-dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:#58d68d;margin-right:8px;box-shadow:0 0 0 4px #58d68d22}.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+@media(max-width:520px){.modal-actions{grid-template-columns:1fr}}
+@media(max-width:680px){.row,.grid{grid-template-columns:1fr}.modules{grid-template-columns:1fr 1fr}.calendar{gap:3px}.daycell{min-height:66px;padding:4px}.search{grid-template-columns:1fr}.nav button{font-size:.64em}}
+@media(max-width:430px){.modules{grid-template-columns:1fr}.top{padding:15px}}
+@media print{.nav,.back,.top .search,.no-print{display:none!important}.screen{display:block!important}.app{padding:0}.card{break-inside:avoid;box-shadow:none}}
+
+/* AdamOS 1.2.5: profesjonalny interfejs */
+body{background:
+ radial-gradient(circle at 15% 0%,rgba(57,130,246,.18),transparent 34%),
+ radial-gradient(circle at 90% 12%,rgba(90,160,225,.10),transparent 28%),
+ linear-gradient(180deg,#020914 0%,#071426 48%,#04101f 100%);background-attachment:fixed}
+.app-shell{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s ease}
+.app-shell.ready{opacity:1;transform:none}
+.screen.active{display:block!important;opacity:1!important;transform:none!important;animation:none!important}
+to{opacity:1;transform:translateY(0) scale(1)}}
+button{transition:transform .14s ease,filter .14s ease,box-shadow .2s ease}
+button:active{transform:scale(.975);filter:brightness(1.12)}
+.card,.tile{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.tile:active{transform:scale(.985)}
+.splash{position:fixed;inset:0;z-index:12000;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 50% 32%,#173f6b 0,#071426 44%,#020812 100%);transition:opacity .55s ease,visibility .55s ease}
+.splash.hide{opacity:0;visibility:hidden}
+.splash-card{text-align:center;width:min(440px,100%);padding:32px 24px;border:1px solid #c7d5e3;border-radius:32px;background:linear-gradient(180deg,rgba(21,58,96,.96),rgba(5,22,40,.98));box-shadow:0 0 0 1px rgba(116,171,220,.25),0 0 44px rgba(55,147,230,.42),0 30px 90px #000c}
+.splash-logo{width:92px;height:92px;margin:auto;border-radius:26px;display:grid;place-items:center;font-size:46px;background:linear-gradient(145deg,#1d67bd,#0a2f5c);border:1px solid #9fc6ea;box-shadow:0 0 28px rgba(57,145,226,.55)}
+.splash-title{font-size:2.25em;font-weight:950;margin-top:18px}.splash-sub{color:#c4d5e6;margin-top:4px}.splash-progress{height:10px;border-radius:999px;background:#030b15;border:1px solid #54789a;overflow:hidden;margin-top:25px}.splash-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#69b7ff,#fff);box-shadow:0 0 16px #68b9ff;animation:loadBar 1.15s ease forwards}@keyframes loadBar{to{width:100%}}
+.fatal-error{position:fixed;inset:0;z-index:13000;background:#071426;color:white;display:flex;align-items:center;justify-content:center;padding:24px}.fatal-box{max-width:520px;background:#102d4f;border:1px solid #c7d5e3;border-radius:26px;padding:24px;box-shadow:0 0 32px #4b9be955}.fatal-box button{width:100%;margin-top:12px}
+
+
+/* Bezpieczne animacje zawartości modułów na iPhone */
+@keyframes cardRevealSafe{
+  from{opacity:0;transform:translateY(10px) scale(.992)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.screen.active .card,
+.screen.active .item,
+.screen.active .metric,
+.screen.active .tile{
+  opacity:1;
+  transform:none;
+}
+.screen.module-reveal .card,
+.screen.module-reveal .item,
+.screen.module-reveal .metric,
+.screen.module-reveal .tile{
+  animation:cardRevealSafe .28s cubic-bezier(.2,.8,.2,1) both;
+  will-change:opacity,transform;
+}
+.screen.module-reveal .card:nth-of-type(1),
+.screen.module-reveal .item:nth-of-type(1),
+.screen.module-reveal .metric:nth-of-type(1),
+.screen.module-reveal .tile:nth-of-type(1){animation-delay:.02s}
+.screen.module-reveal .card:nth-of-type(2),
+.screen.module-reveal .item:nth-of-type(2),
+.screen.module-reveal .metric:nth-of-type(2),
+.screen.module-reveal .tile:nth-of-type(2){animation-delay:.07s}
+.screen.module-reveal .card:nth-of-type(3),
+.screen.module-reveal .item:nth-of-type(3),
+.screen.module-reveal .metric:nth-of-type(3),
+.screen.module-reveal .tile:nth-of-type(3){animation-delay:.12s}
+.screen.module-reveal .card:nth-of-type(4),
+.screen.module-reveal .item:nth-of-type(4),
+.screen.module-reveal .metric:nth-of-type(4),
+.screen.module-reveal .tile:nth-of-type(4){animation-delay:.17s}
+.screen.module-reveal .card:nth-of-type(n+5),
+.screen.module-reveal .item:nth-of-type(n+5),
+.screen.module-reveal .metric:nth-of-type(n+5),
+.screen.module-reveal .tile:nth-of-type(n+5){animation-delay:.2s}
+
+@media (prefers-reduced-motion: reduce){
+  .screen.module-reveal .card,
+  .screen.module-reveal .item,
+  .screen.module-reveal .metric,
+  .screen.module-reveal .tile{
+    animation:none!important;
+  }
+}
+
+
+.hours-bank{background:linear-gradient(180deg,#102d4f,#0a213b);border:1px solid #a9bed3;box-shadow:0 0 24px #4b9be933}
+.bank-positive{color:#7ff0b2}.bank-negative{color:#ff9a9a}
+.bank-history{max-height:420px;overflow:auto}
+.bank-entry{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.holiday-note{border:1px solid #d7b65c;background:#5a431522;border-radius:14px;padding:10px;margin-top:10px}
+
+</style>
+</head>
+
+<body>
+<div id="lockScreen" class="lock-screen hidden" aria-modal="true" role="dialog">
+ <div class="lock-panel">
+  <div class="lock-logo">AdamOS</div>
+  <div class="lock-sub">My Life • dostęp chroniony</div>
+  <div id="lockTitle" class="big">Wpisz 4-cyfrowy PIN</div>
+  <div class="pin-dots" id="pinDots"></div>
+  <div id="lockMessage" class="lock-message"></div>
+  <div class="pin-pad" id="pinPad">
+   <button onclick="pinKey('1')">1</button><button onclick="pinKey('2')">2</button><button onclick="pinKey('3')">3</button>
+   <button onclick="pinKey('4')">4</button><button onclick="pinKey('5')">5</button><button onclick="pinKey('6')">6</button>
+   <button onclick="pinKey('7')">7</button><button onclick="pinKey('8')">8</button><button onclick="pinKey('9')">9</button>
+   <button onclick="clearPin()">WYCZYŚĆ</button><button onclick="pinKey('0')">0</button><button onclick="backPin()">⌫</button>
+  </div>
+  <button id="faceUnlockBtn" class="white hidden" style="width:100%;margin-top:14px" onclick="unlockWithFaceID()">🔐 ODBLOKUJ FACE ID</button>
+  <div class="small" style="margin-top:13px">PIN nie jest wysyłany do GitHuba ani na zewnętrzny serwer.</div>
+ </div>
+</div>
+<div id="splashScreen" class="splash"><div class="splash-card"><div class="splash-logo">🚀</div><div class="splash-title">AdamOS</div><div class="splash-sub">My Life • uruchamianie systemu</div><div class="splash-progress"><span></span></div><div class="small" style="margin-top:13px">Ładowanie bezpiecznych modułów…</div></div></div>
+<div id="fatalError" class="fatal-error hidden"><div class="fatal-box"><h2>AdamOS nie uruchomił się prawidłowo</h2><p id="fatalText">Wystąpił błąd podczas ładowania.</p><button onclick="location.reload()">URUCHOM PONOWNIE</button></div></div>
+<div id="appShell" class="app-shell"><div class="app">
+<header class="top">
+ <div class="brand"><div><h1>AdamOS</h1><div class="tag">My Life • osobisty system zarządzania</div><div class="version-badge">Wersja <span id="headerVersion">1.2.0</span></div></div><div style="display:flex;gap:8px"><button class="ghost" onclick="lockNow()" aria-label="Zablokuj AdamOS">🔒</button><button class="white" onclick="openScreen('ustawienia')">⚙️</button></div></div>
+ <div id="todayDate" class="date"></div>
+ <div class="search"><input id="globalSearch" placeholder="Szukaj w całym AdamOS"><button onclick="runSearch()">SZUKAJ</button></div>
+</header>
+
+<main>
+<section id="home" class="screen active">
+ <div class="card"><h2>⭐ Dzisiaj</h2>
+  <div class="grid">
+   <div class="metric"><span>POSTĘP DNIA</span><b id="dayProgress">0%</b><div class="progress"><div id="dayBar" class="bar"></div></div></div>
+   <div class="metric"><span>NAJBLIŻSZE PRZYPOMNIENIA</span><b id="reminderCount">0</b></div>
+   <div class="metric"><span>ZADANIA NA DZIŚ</span><b id="todayTasks">0</b></div>
+   <div class="metric"><span>CEL FINANSOWY</span><b id="homeGoal">0%</b></div>
+  </div>
+  <div id="smartHints"></div>
+ </div>
+ <div class="card system-ok"><h2>🟢 Stan systemu</h2><div><span class="status-dot"></span><b>Wszystkie moduły działają poprawnie</b></div><div class="small" style="margin-top:8px">AdamOS <span id="homeVersion">1.2.0</span> • ostatnia aktualizacja: 31 lipca 2026</div></div>
+ <div class="grid modules">
+  <button class="tile" onclick="openScreen('planner')"><span class="ico">📅</span><b>Planer</b><span>Zadania, godziny, priorytety i notatki</span></button>
+  <button class="tile" onclick="openScreen('praca')"><span class="ico">⏱️</span><b>Czas pracy</b><span>Wejście, wyjście, przerwy, wolne i wypłata</span></button>
+  <button class="tile" onclick="openScreen('kalendarz')"><span class="ico">🗓️</span><b>Kalendarz</b><span>Wspólny widok wydarzeń i terminów</span></button>
+  <button class="tile" onclick="openScreen('przypomnienia')"><span class="ico">🔔</span><b>Przypomnienia</b><span>Wszystkie ważne terminy w jednym miejscu</span></button>
+  <button class="tile" onclick="openScreen('finanse')"><span class="ico">💰</span><b>Finanse</b><span>Operacje, cele i wydatki cykliczne</span></button>
+  <button class="tile" onclick="openScreen('leki')"><span class="ico">💊</span><b>Leki i witaminy</b><span>Pory przyjmowania, odhaczanie i zapasy</span></button>
+  <button class="tile" onclick="openScreen('dom')"><span class="ico">🧹</span><b>Dom</b><span>Sprzątanie i obowiązki cykliczne</span></button>
+  <button class="tile" onclick="openScreen('magazyn')"><span class="ico">📦</span><b>Magazyn domowy</b><span>Zapasy i ostrzeżenia o brakach</span></button>
+  <button class="tile" onclick="openScreen('zakupy')"><span class="ico">🛒</span><b>Lista zakupów</b><span>Duża, prosta lista do odhaczania</span></button>
+  <button class="tile" onclick="openScreen('podroze')"><span class="ico">✈️</span><b>Podróże</b><span>Rezerwacje, terminy i lista pakowania</span></button>
+  <button class="tile" onclick="openScreen('najem')"><span class="ico">🏘️</span><b>Najem</b><span>Lokale, płatności, umowy i naprawy</span></button>
+  <button class="tile" onclick="openScreen('dokumenty')"><span class="ico">📄</span><b>Dokumenty</b><span>Archiwum zdjęć i plików z opisami</span></button>
+  <button class="tile" onclick="openScreen('statystyki')"><span class="ico">📊</span><b>Statystyki</b><span>Podsumowania aktywności całego systemu</span></button>
+  <button class="tile" onclick="openScreen('osczasu')"><span class="ico">🧭</span><b>Oś czasu</b><span>Chronologiczna historia wydarzeń</span></button>
+  <button class="tile" onclick="openScreen('osiagniecia')"><span class="ico">🏆</span><b>Osiągnięcia</b><span>Kamienie milowe i motywacja</span></button>
+  <button class="tile" onclick="openScreen('ai')"><span class="ico">🤖</span><b>AdamOS AI</b><span>Przygotowane miejsce na przyszłą rozbudowę</span></button>
+ </div>
+</section>
+
+<section id="planner" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>📅 Planer dnia</h2>
+ <div class="row"><div><label>Data</label><input id="planDate" type="date"></div><div><label>Energia 1 do 10</label><input id="energy" type="number" min="1" max="10" value="7"></div></div>
+ <h3>Dodaj zadanie</h3><div class="row"><input id="taskText" placeholder="Co masz zrobić?"><select id="taskPriority"><option>Wysoki</option><option selected>Normalny</option><option>Niski</option></select></div>
+ <div class="row"><input id="taskTime" type="time"><button class="red" onclick="addTask()">DODAJ ZADANIE</button></div>
+ <h3>Postęp dnia</h3><div class="progress"><div id="taskBar" class="bar"></div></div><div id="taskProgress" class="small"></div><div id="taskList"></div>
+ <h3>Notatki</h3><textarea id="planNotes" placeholder="Ważne informacje na dziś" oninput="saveNote()"></textarea>
+</div></section>
+
+<section id="praca" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button>
+<div class="card"><h2>⏱️ Czas pracy</h2>
+ <div class="quick-work">
+  <button onclick="jumpWorkDay(-1)">WCZORAJ</button>
+  <button class="red" onclick="jumpWorkDay(0)">DZISIAJ</button>
+  <button onclick="jumpWorkDay(1)">JUTRO</button>
+ </div>
+ <div class="row"><button onclick="changeWeek(-7)">‹ POPRZEDNI TYDZIEŃ</button><button onclick="changeWeek(7)">NASTĘPNY TYDZIEŃ ›</button></div>
+ <div id="weekTitle" style="margin:14px 0;font-size:1.2em"></div>
+ <div class="default-shift">
+  <h3 style="margin-top:0">Domyślna zmiana</h3>
+  <div class="row">
+   <div><label class="field-label">Domyślne przyjście</label><input id="defaultIn" type="time"></div>
+   <div><label class="field-label">Domyślne wyjście</label><input id="defaultOut" type="time"></div>
+  </div>
+  <div><label class="field-label">Domyślna przerwa w minutach</label><input id="defaultBreak" type="number" min="0" step="1"></div>
+  <div class="actions"><button onclick="saveDefaultShift()">ZAPISZ DOMYŚLNĄ ZMIANĘ</button><button onclick="applyDefaultToEmptyDays()">WSTAW DO PUSTYCH DNI</button></div>
+ </div>
+ <div id="workDays"></div>
+</div>
+<div class="card"><h2>Podsumowanie tygodnia</h2><div class="grid">
+ <div class="metric"><span>RZECZYWISTY CZAS PRACY</span><b id="workHours">0 h 00 min</b></div>
+ <div class="metric"><span>GODZINY W SYSTEMIE</span><b id="systemHoursSummary">Nie wpisano</b></div>
+ <div class="metric"><span>NOWE GODZINY POZA SYSTEMEM</span><b id="outsideAdded">0 h 00 min</b></div>
+ <div class="metric"><span>RĘCZNIE ODEBRANE W TYM TYGODNIU</span><b id="outsideTaken">0 h 00 min</b></div>
+ <div class="metric"><span>SALDO TEGO TYGODNIA</span><b id="outsideWeekBalance">0 h 00 min</b></div>
+ <div class="metric"><span>ŁĄCZNE SALDO DO ODEBRANIA</span><b id="outsideTotalBalance">0 h 00 min</b></div>
+ <div class="metric"><span>DO 60 GODZIN</span><b id="workRemain">60 h 00 min</b></div>
+ <div class="metric"><span>BRUTTO Z RZECZYWISTYCH GODZIN</span><b id="workGross">£0.00</b></div>
+</div>
+<div class="system-hours">
+ <h3 style="margin-top:0">Godziny zapisane przez menadżera w systemie</h3>
+ <div class="small">Wpisz dokładnie wartość z systemu lub payslipu. AdamOS nie zakłada automatycznie limitu 60 godzin.</div>
+ <div class="row">
+  <div><label class="field-label">Pełne godziny</label><input id="systemHoursInput" type="number" min="0" step="1" inputmode="numeric" placeholder="np. 60" oninput="saveSystemHoursLive()"></div>
+  <div><label class="field-label">Minuty</label><input id="systemMinutesInput" type="number" min="0" max="59" step="1" inputmode="numeric" placeholder="np. 23" oninput="saveSystemHoursLive()"></div>
+ </div>
+ <div class="actions"><button onclick="setSystemTo60()">USTAW 60 H</button><button class="ghost" onclick="clearSystemHours()">WYCZYŚĆ WPIS</button></div>
+ <div id="workComparison" class="work-alert work-ok">Wpisz godziny z systemu, aby obliczyć godziny poza systemem.</div>
+</div>
+<h3>Ustawienia wypłaty</h3>
+<div class="row">
+ <div><label class="field-label">Stawka godzinowa brutto w £</label><input id="rate" type="number" step=".01" value="14.76"></div>
+ <div><label class="field-label">Składka emerytalna w %</label><input id="pension" type="number" step=".01" value="3.8"></div>
+</div></div>
+<div class="card hours-bank">
+ <h2>🏦 Bank godzin poza systemem</h2>
+ <div class="grid">
+  <div class="metric"><span>AUTOMATYCZNIE NALICZONE</span><b id="bankAutomatic">0 h 00 min</b></div>
+  <div class="metric"><span>RĘCZNIE DODANE Z PRZESZŁOŚCI</span><b id="bankManualAdded">0 h 00 min</b></div>
+  <div class="metric"><span>RĘCZNIE ODEBRANE</span><b id="bankManualTaken">0 h 00 min</b></div>
+  <div class="metric"><span>AKTUALNE SALDO BANKU</span><b id="bankBalance">0 h 00 min</b></div>
+ </div>
+ <h3>Dodaj ręczny wpis</h3>
+ <div class="small">Tutaj wpiszesz godziny uzbierane przed rozpoczęciem korzystania z AdamOS albo godziny, które faktycznie odebrałeś. AdamOS nie odejmie ich sam.</div>
+ <div class="row">
+  <div><label class="field-label">Rodzaj wpisu</label><select id="bankEntryType"><option value="add">Dodaj godziny z przeszłości</option><option value="take">Odebrane godziny</option><option value="correction">Korekta salda</option></select></div>
+  <div><label class="field-label">Data</label><input id="bankEntryDate" type="date"></div>
+ </div>
+ <div class="row">
+  <div><label class="field-label">Pełne godziny</label><input id="bankEntryHours" type="number" min="0" step="1" inputmode="numeric" placeholder="np. 12"></div>
+  <div><label class="field-label">Minuty</label><input id="bankEntryMinutes" type="number" min="0" max="59" step="1" inputmode="numeric" placeholder="np. 30"></div>
+ </div>
+ <label class="field-label">Opis opcjonalny</label><input id="bankEntryNote" placeholder="np. saldo sprzed AdamOS albo wolne 15 sierpnia">
+ <button class="red" style="width:100%;margin-top:10px" onclick="addBankEntry()">ZAPISZ WPIS W BANKU</button>
+ <h3>Historia banku</h3>
+ <div id="bankHistory" class="bank-history"></div>
+</div></section>
+
+<section id="kalendarz" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>🗓️ Kalendarz miesięczny</h2><div class="row"><button onclick="calendarMove(-1)">‹ POPRZEDNI</button><button onclick="calendarMove(1)">NASTĘPNY ›</button></div><h3 id="calendarTitle"></h3><div id="calendarGrid" class="calendar"></div></div></section>
+
+<section id="przypomnienia" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>🔔 Centrum przypomnień</h2>
+ <div class="row"><input id="remText" placeholder="Treść przypomnienia"><input id="remDate" type="datetime-local"></div><button class="red" onclick="addReminder()">DODAJ PRZYPOMNIENIE</button><div id="remList"></div>
+</div></section>
+
+<section id="finanse" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>💰 Finanse</h2>
+ <div class="grid"><div class="metric"><span>SALDO WPISÓW</span><b id="financeBalance">0,00 zł</b></div><div class="metric"><span>CEL OSZCZĘDNOŚCIOWY</span><b id="goalProgress">0%</b></div></div>
+ <h3>Nowa operacja</h3><div class="row"><input id="finName" placeholder="Nazwa"><input id="finAmount" type="number" step=".01" placeholder="Kwota"></div><div class="row"><select id="finType"><option>Dochód</option><option>Wydatek</option></select><select id="finCurrency"><option>PLN</option><option>GBP</option><option>EUR</option></select></div><button class="red" onclick="addFinance()">DODAJ OPERACJĘ</button><div id="financeList"></div>
+ <h3>Cel finansowy</h3><div class="row"><input id="goalCurrent" type="number" placeholder="Stan obecny"><input id="goalTarget" type="number" placeholder="Cel"></div><button onclick="saveGoal()">ZAPISZ CEL</button>
+</div><div class="card"><h2>🔁 Wydatki cykliczne</h2><div class="row"><input id="billName" placeholder="Nazwa opłaty"><input id="billAmount" type="number" placeholder="Kwota"></div><div class="row"><input id="billDay" type="number" min="1" max="31" placeholder="Dzień miesiąca"><select id="billCurrency"><option>PLN</option><option>GBP</option><option>EUR</option></select></div><button class="red" onclick="addBill()">DODAJ OPŁATĘ</button><div id="billList"></div></div></section>
+
+<section id="leki" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>💊 Leki i witaminy</h2>
+ <div class="row"><input id="medName" placeholder="Nazwa"><select id="medTime"><option>Rano</option><option>Wieczór</option><option>Do pracy</option><option>Inna pora</option></select></div><div class="row"><input id="medStock" type="number" placeholder="Liczba sztuk"><input id="medDose" placeholder="Dawka"></div><button class="red" onclick="addMed()">DODAJ</button><div id="medList"></div>
+</div></section>
+
+<section id="dom" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>🧹 Dom i sprzątanie</h2>
+ <div class="row"><input id="homeText" placeholder="Zadanie"><select id="homeFreq"><option>Codziennie</option><option>Tygodniowo</option><option>Miesięcznie</option><option>Kwartalnie</option><option>Półrocznie</option><option>Rocznie</option></select></div><button class="red" onclick="addHomeTask()">DODAJ ZADANIE</button><div id="homeList"></div>
+</div></section>
+
+<section id="magazyn" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>📦 Magazyn domowy</h2>
+ <div class="row"><input id="stockName" placeholder="Produkt"><input id="stockQty" type="number" placeholder="Ilość"></div><div class="row"><input id="stockMin" type="number" placeholder="Minimum"><input id="stockUnit" placeholder="Jednostka, np. szt."></div><button class="red" onclick="addStock()">DODAJ PRODUKT</button><div id="stockList"></div>
+</div></section>
+
+<section id="zakupy" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>🛒 Lista zakupów</h2>
+ <div class="row"><input id="shopName" placeholder="Co kupić?"><select id="shopCat"><option>Spożywcze</option><option>Dom</option><option>Kosmetyki</option><option>Zdrowie</option><option>Inne</option></select></div><button class="red" onclick="addShopping()">DODAJ DO LISTY</button><div id="shopList"></div>
+</div></section>
+
+<section id="podroze" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>✈️ Podróże</h2>
+ <div class="row"><input id="tripName" placeholder="Nazwa podróży"><input id="tripDate" type="date"></div><textarea id="tripDetails" placeholder="Lot, hotel, terminal, rezerwacja, PRM, transfer"></textarea><button class="red" onclick="addTrip()">DODAJ PODRÓŻ</button><div id="tripList"></div>
+</div><div class="card"><h2>🧳 Lista pakowania</h2><div class="row"><input id="packName" placeholder="Przedmiot"><button onclick="addPack()">DODAJ</button></div><div id="packList"></div></div></section>
+
+<section id="najem" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>🏘️ Najem</h2>
+ <div class="row"><input id="rentProperty" placeholder="Lokal"><input id="rentTenant" placeholder="Najemca"></div><div class="row"><input id="rentAmount" type="number" placeholder="Czynsz"><input id="rentDue" type="date"></div><textarea id="rentNotes" placeholder="Umowa, kaucja, naprawy, notatki"></textarea><button class="red" onclick="addRental()">DODAJ LOKAL / WPIS</button><div id="rentList"></div>
+</div></section>
+
+<section id="dokumenty" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>📄 Dokumenty</h2>
+ <div class="item small">Możesz dodać zdjęcie lub plik z iPhone’a. Pliki są przechowywane lokalnie, dlatego duże załączniki mogą szybko zająć pamięć przeglądarki.</div>
+ <input id="docFile" type="file" accept="image/*,.pdf" capture="environment"><input id="docName" placeholder="Nazwa dokumentu"><select id="docCat"><option>Umowy</option><option>Rachunki</option><option>Podróże</option><option>Zdrowie</option><option>Mieszkania</option><option>Inne</option></select><button class="red" onclick="addDocument()">DODAJ DOKUMENT</button><div id="docList"></div>
+</div></section>
+
+<section id="statystyki" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>📊 Statystyki</h2><div id="statsGrid" class="grid"></div></div></section>
+<section id="osczasu" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>🧭 Oś czasu</h2><div id="timelineList"></div></div></section>
+<section id="osiagniecia" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>🏆 Osiągnięcia</h2><div id="achievementList"></div></div></section>
+<section id="ai" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>🤖 AdamOS AI</h2><div class="item">Moduł przygotowany do przyszłej rozbudowy. W tej wersji nie wysyła danych poza urządzenie.</div><input placeholder="W przyszłości zapytasz tutaj o swoje dane" disabled><button disabled>WKRÓTCE</button></div></section>
+
+<section id="ustawienia" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>⚙️ Centrum systemu</h2>
+ 
+<h3>Bezpieczeństwo</h3>
+<div class="item security-card">
+ <div class="security-status"><span id="securityDot" class="security-dot"></span><b id="securityStatus">Blokada wyłączona</b></div>
+ <div class="small" style="margin-top:7px">PIN chroni dane zapisane w tej przeglądarce. Face ID korzysta z zabezpieczeń iPhone’a, gdy jest obsługiwane.</div>
+ <div class="actions">
+  <button onclick="startPinSetup()">USTAW / ZMIEŃ PIN</button>
+  <button id="faceSetupBtn" onclick="setupFaceID()">WŁĄCZ FACE ID</button>
+  <button onclick="lockNow()">ZABLOKUJ TERAZ</button>
+  <button class="red" onclick="disableSecurity()">WYŁĄCZ BLOKADĘ</button>
+ </div>
+ <label class="field-label">Automatyczna blokada po bezczynności</label>
+ <select id="autoLockMinutes" onchange="saveSecuritySettings()">
+  <option value="1">Po 1 minucie</option>
+  <option value="5">Po 5 minutach</option>
+  <option value="15">Po 15 minutach</option>
+  <option value="30">Po 30 minutach</option>
+  <option value="0">Nigdy automatycznie</option>
+ </select>
+</div>
+
+<h3>Accessibility+</h3><label>Rozmiar czcionki</label><select id="fontSize" onchange="updateSettings()"><option value="15">Bardzo mała</option><option value="17">Mała</option><option value="20">Standard</option><option value="23">Duża</option><option value="26">XL</option><option value="30">XXL</option></select>
+ <div class="row"><div><label>Motyw</label><select id="theme" onchange="updateSettings()"><option value="dark">Ciemny</option><option value="light">Jasny</option><option value="contrast">Wysoki kontrast</option></select></div><div><label>Grubość tekstu</label><select id="fontWeight" onchange="updateSettings()"><option value="500">Zwykła</option><option value="700">Pogrubiona</option><option value="850">Bardzo gruba</option></select></div></div>
+ <div style="margin-top:12px"><label>Początek tygodnia pracy</label><select id="weekStartSetting" onchange="updateWeekStart()"><option value="sunday">Niedziela → Sobota</option><option value="monday">Poniedziałek → Niedziela</option></select><div class="small">Zmiana wpływa na układ i podsumowanie tygodnia w module Czas pracy.</div></div>
+ <div class="row"><label><input id="oneHand" type="checkbox" onchange="updateSettings()"> Tryb jednej ręki</label><label><input id="compact" type="checkbox" onchange="updateSettings()"> Ukryj mniej ważne informacje</label></div>
+ <h3>Kopia i eksport</h3><div class="row"><button onclick="exportData()">EKSPORTUJ KOPIĘ</button><button onclick="document.getElementById('importFile').click()">IMPORTUJ KOPIĘ</button></div><input class="hidden" id="importFile" type="file" accept=".json" onchange="importData(event)">
+ <div class="row"><button onclick="window.print()">DRUKUJ / ZAPISZ PDF</button><button onclick="exportCalendar()">EKSPORTUJ KALENDARZ .ICS</button></div>
+ <h3>Wersja i aktualizacje</h3>
+ <div class="update-box"><b>AdamOS <span id="settingsVersion">1.2.0</span></b><div class="small">Data wydania: 31 lipca 2026 • kompilacja: 20260731.4</div><div class="item system-ok" style="margin-top:12px"><span class="status-dot"></span><b>Wszystkie moduły działają poprawnie</b></div><div class="actions"><button onclick="showChangelog(true)">CO NOWEGO?</button><button onclick="checkForUpdates(true)">SPRAWDŹ AKTUALIZACJĘ</button></div><div id="updateStatus" class="small" style="margin-top:8px">Aplikacja sprawdza wersję bez wysyłania Twoich danych.</div></div><h3>Historia aktualizacji</h3><div id="versionHistory"></div>
+ <h3>Instalacja na iPhonie</h3><div class="item">Otwórz stronę w Safari, wybierz Udostępnij, następnie Dodaj do ekranu początkowego. Ikona na ekranie głównym aktualizuje się razem ze stroną.</div>
+ <button class="ghost" style="width:100%;margin-top:12px" onclick="clearAll()">WYCZYŚĆ WSZYSTKIE DANE</button>
+</div></section>
+
+<section id="searchResults" class="screen"><button class="back ghost" onclick="openScreen('home')">‹ STRONA GŁÓWNA</button><div class="card"><h2>🔎 Wyniki wyszukiwania</h2><div id="results"></div></div></section>
+</main>
+</div>
+
+<div id="versionModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="versionTitle">
+ <div class="modal-card">
+  <div class="modal-head"><h2 id="versionTitle">AdamOS 1.2.5</h2><div class="release-meta">Wydano 31 lipca 2026 • kompilacja 20260731.10</div></div>
+  <div class="modal-scroll"><div id="versionIntro" class="item"></div><h3>Co nowego?</h3><ul id="changelogList" class="changelog"></ul></div>
+  <div class="modal-actions"><button class="red" onclick="closeVersionModal()">ROZUMIEM</button><button class="ghost" onclick="openScreen('ustawienia');closeVersionModal()">OTWÓRZ USTAWIENIA</button></div>
+ </div>
+</div>
+
+</div>
+<nav class="nav"><button onclick="openScreen('home')"><i>🏠</i>Start</button><button onclick="openScreen('planner')"><i>📅</i>Planer</button><button onclick="openScreen('praca')"><i>⏱️</i>Praca</button><button onclick="openScreen('przypomnienia')"><i>🔔</i>Terminy</button><button onclick="openScreen('ustawienia')"><i>⚙️</i>System</button></nav>
+</div>
+
+<script>
+const KEY="adamos_db_v3";
+const APP_VERSION="1.2.5";
+const RELEASE_DATE="31 lipca 2026";
+const BUILD_NUMBER="20260731.10";
+const VERSION_SEEN_KEY="adamos_seen_version";
+const CHANGELOG={
+ "1.2.0":[
+  "Dodano profesjonalny ekran uruchamiania AdamOS.",
+  "Dodano płynne przejścia między modułami i reakcje przycisków.",
+  "Utrzymano 4-cyfrowy PIN, Face ID i automatyczną blokadę.",
+  "Dodano awaryjny ekran błędu zamiast pustej białej strony.",
+  "Ujednolicono wygląd w stylu premium: srebrna obwódka, jaśniejsze karty i niebieska poświata."
+ ],
+ "1.1.0":[
+  "Poprawiono ekran aktualizacji, który teraz mieści się na iPhonie i przewija tylko treść.",
+  "Dodano datę wydania oraz numer kompilacji.",
+  "Dodano stan systemu na stronie głównej i w ustawieniach.",
+  "Dodano pełną historię aktualizacji.",
+  "Ujednolicono karty, odstępy i delikatne animacje przejść.",
+  "Przygotowano rdzeń aplikacji do dalszej rozbudowy modułów bez usuwania danych."
+ ],
+ "1.0.1":[
+  "Dodano stały numer wersji w nagłówku i ustawieniach.",
+  "Dodano ekran Co nowego? wyświetlany po pierwszym uruchomieniu nowej wersji.",
+  "Dodano ręczne sprawdzanie aktualizacji z pominięciem pamięci podręcznej.",
+  "Doprecyzowano informację, że ikony AdamOS na iPhonie nie trzeba usuwać po każdej aktualizacji."
+ ],
+ "1.0.0":[
+  "Ręczne wpisywanie przyjścia, wyjścia i przerwy.",
+  "Porównanie rzeczywistych godzin z godzinami zapisanymi przez menadżera.",
+  "Automatyczne tygodniowe i łączne saldo godzin poza systemem.",
+  "Status Odbiór godzin poza systemem."
+ ]
+};
+const defaults={tasks:[],notes:{},work:{},workWeeks:{},bankEntries:[],finances:[],bills:[],meds:[],homeTasks:[],stocks:[],shopping:[],trips:[],packing:[],rentals:[],documents:[],reminders:[],timeline:[],goal:{current:0,target:700000},settings:{theme:"dark",fontSize:"20",fontWeight:"700",oneHand:false,compact:false,weekStart:"sunday",defaultWorkIn:"14:00",defaultWorkOut:"02:00",defaultWorkBreak:30,securityEnabled:false,pinHash:"",faceCredentialId:"",autoLockMinutes:5}};
+let db=load();db.settings=db.settings||{};db.workWeeks=db.workWeeks||{};db.bankEntries=db.bankEntries||[];if(!db.settings.weekStart)db.settings.weekStart="sunday";
+if(db.settings.defaultWorkIn===undefined)db.settings.defaultWorkIn="14:00";
+if(db.settings.defaultWorkOut===undefined)db.settings.defaultWorkOut="02:00";
+if(db.settings.defaultWorkBreak===undefined)db.settings.defaultWorkBreak=30;let weekStart=startWeek(new Date()),calendarDate=new Date();
+function clone(x){return JSON.parse(JSON.stringify(x))}
+function load(){try{return Object.assign(clone(defaults),JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){return clone(defaults)}}
+function save(){localStorage.setItem(KEY,JSON.stringify(db));refreshAll()}
+function gid(){return Date.now()+Math.random().toString(16).slice(2)}
+function iso(d){let x=new Date(d);return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")}
+function today(){return iso(new Date())}
+function fmt(d){if(!d)return"";return new Date(d).toLocaleDateString("pl-PL")}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function startWeek(d){
+ let x=new Date(d),mode=(db&&db.settings&&db.settings.weekStart)||"sunday";
+ let day=mode==="monday"?(x.getDay()+6)%7:x.getDay();
+ x.setHours(0,0,0,0);x.setDate(x.getDate()-day);return x
+}
+function addTimeline(type,text,date=new Date().toISOString()){db.timeline.unshift({id:gid(),type,text,date});db.timeline=db.timeline.slice(0,300)}
+function openScreen(id){
+ const target=document.getElementById(id);
+ if(!target)return;
+ document.querySelectorAll(".screen").forEach(x=>{
+  x.classList.remove("active","module-reveal");
+  x.style.display="none";
+  x.style.opacity="1";
+  x.style.transform="none";
+ });
+ target.classList.add("active");
+ target.style.display="block";
+ target.style.opacity="1";
+ target.style.transform="none";
+ window.scrollTo({top:0,left:0,behavior:"auto"});
+ requestAnimationFrame(()=>{
+  target.classList.add("module-reveal");
+  setTimeout(()=>target.classList.remove("module-reveal"),520);
+ });
+}
+function del(arr,id){db[arr]=db[arr].filter(x=>x.id!==id);save()}
+function toggle(arr,id){let x=db[arr].find(x=>x.id===id);if(x)x.done=!x.done;save()}
+
+function addTask(){let text=taskText.value.trim();if(!text)return;db.tasks.push({id:gid(),text,date:planDate.value||today(),time:taskTime.value,priority:taskPriority.value,done:false});addTimeline("Planer","Dodano zadanie: "+text);taskText.value="";save()}
+function saveNote(){db.notes[planDate.value||today()]=planNotes.value;localStorage.setItem(KEY,JSON.stringify(db))}
+function renderTasks(){let d=planDate.value||today(),a=db.tasks.filter(x=>x.date===d),done=a.filter(x=>x.done).length,p=a.length?Math.round(done/a.length*100):0;taskBar.style.width=p+"%";taskProgress.textContent=`${done} z ${a.length} wykonanych`;taskList.innerHTML=a.map(x=>`<div class="item"><b>${esc(x.time||"Bez godziny")} • ${esc(x.text)}</b><div class="small">Priorytet: ${esc(x.priority)}</div><div class="actions"><button onclick="toggle('tasks','${x.id}')">${x.done?"COFNIJ":"WYKONANE"}</button><button class="red" onclick="del('tasks','${x.id}')">USUŃ</button></div></div>`).join("")||'<div class="item">Brak zadań.</div>';planNotes.value=db.notes[d]||""}
+
+function workKey(d){return iso(d)}
+function changeWeek(n){weekStart.setDate(weekStart.getDate()+n);renderWork()}
+function minutesText(hours){
+ let mins=Math.round(hours*60),h=Math.floor(mins/60),m=mins%60;
+ return `${h} h ${String(m).padStart(2,"0")} min`
+}
+function weekKey(){return iso(weekStart)}
+function getWeekRecord(){
+ db.workWeeks=db.workWeeks||{};
+ return db.workWeeks[weekKey()]||{systemMinutes:null}
+}
+function dayMinutes(w){return Math.round(calcHours(w)*60)}
+function takenMinutes(w){
+ return 0
+}
+function weekTotals(start=weekStart){
+ let actual=0,taken=0;
+ for(let i=0;i<7;i++){
+  let d=new Date(start);d.setDate(d.getDate()+i);let w=db.work[workKey(d)]||{};
+  actual+=dayMinutes(w)
+ }
+ let rec=(db.workWeeks||{})[iso(start)]||{};
+ let entered=Number.isFinite(rec.systemMinutes);
+ let system=entered?Math.max(0,Math.round(rec.systemMinutes)):null;
+ let added=entered?Math.max(0,actual-system):0;
+ return {actual,taken,system,entered,added,balance:added-taken}
+}
+function automaticOutsideTotal(){
+ let starts=new Set(Object.keys(db.workWeeks||{}));
+ Object.keys(db.work||{}).forEach(k=>starts.add(iso(startWeek(new Date(k+"T12:00:00")))));
+ let total=0;
+ starts.forEach(k=>total+=weekTotals(new Date(k+"T12:00:00")).added);
+ return total
+}
+function manualBankTotals(){
+ let added=0,taken=0,correction=0;
+ (db.bankEntries||[]).forEach(x=>{
+  let m=Math.round(+x.minutes||0);
+  if(x.type==="add")added+=m;
+  else if(x.type==="take")taken+=m;
+  else if(x.type==="correction")correction+=m
+ });
+ return {added,taken,correction,balance:added-taken+correction}
+}
+function totalOutsideBalance(){
+ let manual=manualBankTotals();
+ return automaticOutsideTotal()+manual.balance
+}
+function minutesLabel(mins){
+ let sign=mins<0?"-":"",n=Math.abs(Math.round(mins)),h=Math.floor(n/60),m=n%60;
+ return `${sign}${h} h ${String(m).padStart(2,"0")} min`
+}
+
+function migrateLegacyTakenHours(){
+ if(db.settings.legacyTakenMigrated)return;
+ let entries=[];
+ Object.entries(db.work||{}).forEach(([date,w])=>{
+  let mins=Math.max(0,Math.round(+w.takenMinutes||0));
+  if(mins>0)entries.push({id:gid(),type:"take",minutes:mins,date,note:"Przeniesiono ze starszego wpisu dnia odbioru",legacy:true})
+ });
+ if(entries.length)db.bankEntries.push(...entries);
+ db.settings.legacyTakenMigrated=true;
+ localStorage.setItem(KEY,JSON.stringify(db))
+}
+function addBankEntry(){
+ let type=bankEntryType.value,date=bankEntryDate.value||today();
+ let h=Math.max(0,Math.floor(+bankEntryHours.value||0));
+ let m=Math.min(59,Math.max(0,Math.floor(+bankEntryMinutes.value||0)));
+ let total=h*60+m;
+ if(total<=0)return alert("Wpisz liczbę godzin lub minut.");
+ let signed=type==="correction"?(confirm("Czy korekta ma ZMNIEJSZYĆ saldo?")?-total:total):total;
+ db.bankEntries.push({id:gid(),type,minutes:signed,date,note:bankEntryNote.value.trim()});
+ addTimeline("Bank godzin",`${type==="add"?"Dodano":type==="take"?"Odebrano":"Skorygowano"} ${minutesLabel(Math.abs(signed))}`,date);
+ bankEntryHours.value="";bankEntryMinutes.value="";bankEntryNote.value="";
+ save()
+}
+function deleteBankEntry(id){
+ if(!confirm("Usunąć ten wpis z banku godzin?"))return;
+ db.bankEntries=db.bankEntries.filter(x=>x.id!==id);save()
+}
+function bankEntryLabel(x){
+ if(x.type==="add")return "Dodano z przeszłości";
+ if(x.type==="take")return "Odebrane ręcznie";
+ return x.minutes<0?"Korekta zmniejszająca":"Korekta zwiększająca"
+}
+function manualTakenForWeek(start=weekStart){
+ let end=new Date(start);end.setDate(end.getDate()+6);
+ let from=iso(start),to=iso(end);
+ return (db.bankEntries||[]).filter(x=>x.type==="take"&&x.date>=from&&x.date<=to).reduce((s,x)=>s+Math.abs(+x.minutes||0),0)
+}
+function renderBank(){
+ if(!document.getElementById("bankBalance"))return;
+ let automatic=automaticOutsideTotal(),manual=manualBankTotals(),balance=automatic+manual.balance;
+ bankAutomatic.textContent=minutesLabel(automatic);
+ bankManualAdded.textContent=minutesLabel(manual.added+Math.max(0,manual.correction));
+ bankManualTaken.textContent=minutesLabel(manual.taken+Math.max(0,-manual.correction));
+ bankBalance.textContent=minutesLabel(balance);
+ bankBalance.className=balance<0?"bank-negative":"bank-positive";
+ bankEntryDate.value=bankEntryDate.value||today();
+ let list=[...(db.bankEntries||[])].sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+ bankHistory.innerHTML=list.map(x=>`<div class="item bank-entry"><div><b>${esc(bankEntryLabel(x))}: ${minutesLabel(Math.abs(x.minutes))}</b><div class="small">${fmt(x.date)}${x.note?" • "+esc(x.note):""}</div></div><button class="red" onclick="deleteBankEntry('${x.id}')">USUŃ</button></div>`).join("")||'<div class="item small">Brak ręcznych wpisów w banku godzin.</div>'
+}
+
+function renderWork(){
+ let days=db.settings.weekStart==="monday"
+ ?["Poniedziałek","Wtorek","Środa","Czwartek","Piątek","Sobota","Niedziela"]
+ :["Niedziela","Poniedziałek","Wtorek","Środa","Czwartek","Piątek","Sobota"];
+ let html="";
+ for(let i=0;i<7;i++){
+  let d=new Date(weekStart);d.setDate(d.getDate()+i);
+  let k=workKey(d),w=db.work[k]||{status:"Praca",in:"",out:"",break:0,takenMinutes:0};
+  let h=calcHours(w),isToday=k===today(),isWork=w.status==="Praca",isTaken=w.status==="Odbiór godzin poza systemem";
+  html+=`<div class="item work-card ${isToday?"today-work":""}">
+   <div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${days[i]} • ${fmt(d)}</b>${isToday?'<span class="red item" style="margin:0;padding:6px 9px">DZISIAJ</span>':""}</div>
+   <label class="field-label">Status dnia</label>
+   <select onchange="setWork('${k}','status',this.value)">
+    <option ${w.status==="Praca"?"selected":""}>Praca</option>
+    <option ${w.status==="Odbiór godzin poza systemem"?"selected":""}>Odbiór godzin poza systemem</option>
+    <option ${w.status==="Urlop"?"selected":""}>Urlop</option>
+    <option ${w.status==="Dzień wolny"?"selected":""}>Dzień wolny</option>
+    <option ${w.status==="Chorobowe"?"selected":""}>Chorobowe</option>
+    ${(k.endsWith("-12-25")||k.endsWith("-01-01"))?`<option ${w.status==="Święto wolne"?"selected":""}>Święto wolne</option>`:""}
+   </select>
+   ${(k.endsWith("-12-25")||k.endsWith("-01-01"))?`<div class="holiday-note"><b>Dzień wolny świąteczny</b><div class="small">AdamOS rozpoznaje jako stałe dni wolne tylko 25 grudnia i 1 stycznia. Inne święta są traktowane jak zwykłe dni pracy.</div></div>`:""}
+   ${isTaken?`<div class="work-alert"><b>Oficjalnie był to dzień pracy, ale masz wolne w ramach odbioru godzin poza systemem.</b>
+    <div class="small" style="margin-top:8px">Liczbę odebranych godzin wpisz ręcznie w sekcji Bank godzin. Ten status nie zmienia salda automatycznie.</div>
+   </div>`:`<div class="row">
+    <div><label class="field-label">Przyjście do pracy</label><input aria-label="Przyjście do pracy" type="time" value="${w.in||""}" oninput="setWorkLive('${k}','in',this.value)" ${!isWork?"disabled":""}></div>
+    <div><label class="field-label">Wyjście z pracy</label><input aria-label="Wyjście z pracy" type="time" value="${w.out||""}" oninput="setWorkLive('${k}','out',this.value)" ${!isWork?"disabled":""}></div>
+   </div>
+   <div><label class="field-label">Przerwa w minutach</label><input aria-label="Przerwa w minutach" type="number" min="0" step="1" value="${w.break||0}" oninput="setWorkLive('${k}','break',this.value)" ${!isWork?"disabled":""}></div>
+   <div class="work-live"><span class="small">RZECZYWISTY CZAS PRACY</span><br><b id="live_${k}">${minutesText(h)}</b></div>`}
+   <div class="actions">
+    <button onclick="copyPreviousDay('${k}')">KOPIUJ POPRZEDNI DZIEŃ</button>
+    <button onclick="applyDefaultShift('${k}')">WSTAW DOMYŚLNĄ ZMIANĘ</button>
+    <button class="ghost" onclick="clearWorkDay('${k}')">WYCZYŚĆ DZIEŃ</button>
+   </div>
+  </div>`
+ }
+ workDays.innerHTML=html;
+ let end=new Date(weekStart);end.setDate(end.getDate()+6);
+ weekTitle.textContent=`${fmt(weekStart)} - ${fmt(end)}`;
+ let rec=getWeekRecord();
+ systemHoursInput.value=Number.isFinite(rec.systemMinutes)?Math.floor(rec.systemMinutes/60):"";
+ systemMinutesInput.value=Number.isFinite(rec.systemMinutes)?rec.systemMinutes%60:"";
+ if(document.getElementById("defaultIn")){
+  defaultIn.value=db.settings.defaultWorkIn||"";defaultOut.value=db.settings.defaultWorkOut||"";defaultBreak.value=db.settings.defaultWorkBreak??0
+ }
+ updateWorkSummaryOnly()
+}
+function calcHours(w){
+ if(w.status!=="Praca"||!w.in||!w.out)return 0;
+ let [a,b]=w.in.split(":").map(Number),[c,d]=w.out.split(":").map(Number),m=(c*60+d)-(a*60+b);
+ if(m<0)m+=1440;
+ return Math.max(0,(m-(+w.break||0))/60)
+}
+function setWork(k,f,v){
+ db.work[k]=db.work[k]||{status:"Praca",in:"",out:"",break:0,takenMinutes:0};
+ db.work[k][f]=v;
+ if(f==="status"&&v!=="Odbiór godzin poza systemem")db.work[k].takenMinutes=0;
+ addTimeline("Praca",`Zmieniono status lub dane dnia ${k}`);save()
+}
+function setWorkLive(k,f,v){
+ db.work[k]=db.work[k]||{status:"Praca",in:"",out:"",break:0,takenMinutes:0};
+ db.work[k][f]=f==="break"?Math.max(0,+v||0):v;
+ localStorage.setItem(KEY,JSON.stringify(db));
+ let h=calcHours(db.work[k]),el=document.getElementById("live_"+k);if(el)el.textContent=minutesText(h);updateWorkSummaryOnly()
+}
+function setTakenLive(k,part,v){
+ // Zachowane wyłącznie dla zgodności ze starszymi danymi. Bank godzin jest teraz prowadzony ręcznie.
+}
+function saveSystemHoursLive(){
+ let h=systemHoursInput.value,m=systemMinutesInput.value;
+ db.workWeeks=db.workWeeks||{};
+ if(h===""&&m===""){delete db.workWeeks[weekKey()]}else{
+  h=Math.max(0,Math.floor(+h||0));m=Math.min(59,Math.max(0,Math.floor(+m||0)));
+  db.workWeeks[weekKey()]={systemMinutes:h*60+m}
+ }
+ localStorage.setItem(KEY,JSON.stringify(db));updateWorkSummaryOnly()
+}
+function setSystemTo60(){systemHoursInput.value=60;systemMinutesInput.value=0;saveSystemHoursLive()}
+function clearSystemHours(){systemHoursInput.value="";systemMinutesInput.value="";saveSystemHoursLive()}
+function updateWorkSummaryOnly(){
+ let t=weekTotals(),manualWeekTaken=manualTakenForWeek(),gross=(t.actual/60)*(+rate.value||14.76),net=gross*(1-(+pension.value||3.8)/100)*.82,totalBalance=totalOutsideBalance();
+ workHours.textContent=minutesLabel(t.actual);workRemain.textContent=minutesLabel(Math.max(0,3600-t.actual));
+ workGross.textContent="£"+gross.toFixed(2);if(document.getElementById("workNet"))workNet.textContent="£"+net.toFixed(2);
+ systemHoursSummary.textContent=t.entered?minutesLabel(t.system):"Nie wpisano";outsideAdded.textContent=minutesLabel(t.added);outsideTaken.textContent=minutesLabel(manualWeekTaken);outsideWeekBalance.textContent=minutesLabel(t.added-manualWeekTaken);outsideTotalBalance.textContent=minutesLabel(totalBalance);renderBank();
+ outsideTotalBalance.className=totalBalance<0?"balance-negative":"balance-positive";
+ let box=document.getElementById("workComparison");if(!box)return;
+ if(!t.entered){box.className="work-alert work-ok";box.textContent="Wpisz godziny z systemu, aby obliczyć godziny poza systemem."}
+ else if(t.actual>t.system){box.className="work-alert";box.innerHTML=`Rzeczywiście przepracowano o <b>${minutesLabel(t.actual-t.system)}</b> więcej niż zapisano w systemie. Ta różnica została dodana do puli godzin poza systemem.`}
+ else if(t.system>t.actual){box.className="work-alert";box.innerHTML=`System zawiera o <b>${minutesLabel(t.system-t.actual)}</b> więcej niż wynika z wpisanych godzin. Sprawdź rozliczenie.`}
+ else{box.className="work-alert work-ok";box.textContent="Rzeczywisty czas pracy zgadza się z godzinami w systemie."}
+}
+function copyPreviousDay(k){
+ let d=new Date(k+"T12:00:00");d.setDate(d.getDate()-1);
+ let source=db.work[iso(d)];
+ if(!source)return alert("Poprzedni dzień nie ma zapisanych godzin.");
+ db.work[k]=clone(source);
+ addTimeline("Praca","Skopiowano godziny z poprzedniego dnia do "+k);
+ save()
+}
+function saveDefaultShift(){
+ db.settings.defaultWorkIn=defaultIn.value;
+ db.settings.defaultWorkOut=defaultOut.value;
+ db.settings.defaultWorkBreak=Math.max(0,+defaultBreak.value||0);
+ localStorage.setItem(KEY,JSON.stringify(db));
+ alert("Domyślna zmiana została zapisana.")
+}
+function applyDefaultShift(k){
+ db.work[k]={status:"Praca",in:db.settings.defaultWorkIn||"",out:db.settings.defaultWorkOut||"",break:db.settings.defaultWorkBreak||0,takenMinutes:0};
+ addTimeline("Praca","Wstawiono domyślną zmianę dla "+k);
+ save()
+}
+function applyDefaultToEmptyDays(){
+ for(let i=0;i<7;i++){
+  let d=new Date(weekStart);d.setDate(d.getDate()+i);let k=workKey(d),w=db.work[k];
+  if(!w||(!w.in&&!w.out))db.work[k]={status:"Praca",in:db.settings.defaultWorkIn||"",out:db.settings.defaultWorkOut||"",break:db.settings.defaultWorkBreak||0}
+ }
+ addTimeline("Praca","Wstawiono domyślną zmianę do pustych dni tygodnia");
+ save()
+}
+function clearWorkDay(k){
+ db.work[k]={status:"Praca",in:"",out:"",break:0,takenMinutes:0};
+ addTimeline("Praca","Wyczyszczono dzień "+k);
+ save()
+}
+function jumpWorkDay(offset){
+ let d=new Date();d.setDate(d.getDate()+offset);weekStart=startWeek(d);renderWork();
+ setTimeout(()=>{let el=document.querySelector(".today-work");if(offset!==0){let key=iso(d);el=[...document.querySelectorAll(".work-card")].find(x=>x.textContent.includes(fmt(d)))}if(el)el.scrollIntoView({behavior:"smooth",block:"center"})},50)
+}
+
+function addReminder(){if(!remText.value.trim()||!remDate.value)return;db.reminders.push({id:gid(),text:remText.value.trim(),date:remDate.value,done:false});addTimeline("Przypomnienie",remText.value.trim(),remDate.value);remText.value="";save()}
+function renderReminders(){let a=[...db.reminders].sort((x,y)=>new Date(x.date)-new Date(y.date));remList.innerHTML=a.map(x=>`<div class="item"><b>${esc(x.text)}</b><div>${new Date(x.date).toLocaleString("pl-PL")}</div><div class="actions"><button onclick="toggle('reminders','${x.id}')">${x.done?"PRZYWRÓĆ":"WYKONANE"}</button><button class="red" onclick="del('reminders','${x.id}')">USUŃ</button></div></div>`).join("")||'<div class="item">Brak przypomnień.</div>'}
+
+function addFinance(){let n=finName.value.trim(),a=+finAmount.value;if(!n||!a)return;db.finances.push({id:gid(),name:n,amount:a,type:finType.value,currency:finCurrency.value,date:today()});addTimeline("Finanse",`${finType.value}: ${n}`);finName.value=finAmount.value="";save()}
+function saveGoal(){db.goal={current:+goalCurrent.value||0,target:+goalTarget.value||1};save()}
+function addBill(){if(!billName.value.trim())return;db.bills.push({id:gid(),name:billName.value.trim(),amount:+billAmount.value||0,day:+billDay.value||1,currency:billCurrency.value,paid:false});addTimeline("Finanse","Dodano opłatę cykliczną: "+billName.value.trim());billName.value="";save()}
+function renderFinance(){let bal=db.finances.reduce((s,x)=>s+(x.type==="Dochód"?x.amount:-x.amount),0),p=Math.min(100,Math.round((db.goal.current||0)/(db.goal.target||1)*100));financeBalance.textContent=bal.toLocaleString("pl-PL",{minimumFractionDigits:2})+" zł";goalProgress.textContent=p+"%";homeGoal.textContent=p+"%";goalCurrent.value=db.goal.current;goalTarget.value=db.goal.target;financeList.innerHTML=[...db.finances].reverse().map(x=>`<div class="item"><b>${esc(x.name)}</b><div>${x.type}: ${x.amount} ${x.currency}</div><button class="red" onclick="del('finances','${x.id}')">USUŃ</button></div>`).join("");billList.innerHTML=db.bills.map(x=>`<div class="item"><b>${esc(x.name)}</b><div>${x.amount} ${x.currency}, dzień ${x.day}</div><div class="actions"><button onclick="toggleBill('${x.id}')">${x.paid?"OZNACZ JAKO NIEZAPŁACONE":"ZAPŁACONO"}</button><button class="red" onclick="del('bills','${x.id}')">USUŃ</button></div></div>`).join("")}
+function toggleBill(id){let x=db.bills.find(x=>x.id===id);x.paid=!x.paid;save()}
+
+function addMed(){if(!medName.value.trim())return;db.meds.push({id:gid(),name:medName.value.trim(),time:medTime.value,stock:+medStock.value||0,dose:medDose.value,done:false});addTimeline("Leki","Dodano: "+medName.value.trim());medName.value="";save()}
+function renderMeds(){medList.innerHTML=db.meds.map(x=>`<div class="item"><b>${esc(x.name)} • ${esc(x.time)}</b><div>${esc(x.dose)} • zapas: ${x.stock}</div><div class="actions"><button onclick="toggle('meds','${x.id}')">${x.done?"COFNIJ":"PRZYJĘTE"}</button><button class="red" onclick="del('meds','${x.id}')">USUŃ</button></div></div>`).join("")}
+
+function addHomeTask(){if(!homeText.value.trim())return;db.homeTasks.push({id:gid(),text:homeText.value.trim(),freq:homeFreq.value,done:false});addTimeline("Dom","Dodano zadanie: "+homeText.value.trim());homeText.value="";save()}
+function renderHome(){homeList.innerHTML=db.homeTasks.map(x=>`<div class="item"><b>${esc(x.text)}</b><div>${esc(x.freq)}</div><div class="actions"><button onclick="toggle('homeTasks','${x.id}')">${x.done?"COFNIJ":"WYKONANE"}</button><button class="red" onclick="del('homeTasks','${x.id}')">USUŃ</button></div></div>`).join("")}
+
+function addStock(){if(!stockName.value.trim())return;db.stocks.push({id:gid(),name:stockName.value.trim(),qty:+stockQty.value||0,min:+stockMin.value||0,unit:stockUnit.value});addTimeline("Magazyn","Dodano produkt: "+stockName.value.trim());stockName.value="";save()}
+function renderStocks(){stockList.innerHTML=db.stocks.map(x=>`<div class="item"><b>${esc(x.name)}</b><div>Ilość: ${x.qty} ${esc(x.unit)} • minimum: ${x.min}</div>${x.qty<=x.min?'<div class="red item">NISKI STAN</div>':""}<div class="actions"><button onclick="stockChange('${x.id}',1)">+1</button><button onclick="stockChange('${x.id}',-1)">−1</button><button class="red" onclick="del('stocks','${x.id}')">USUŃ</button></div></div>`).join("")}
+function stockChange(id,n){let x=db.stocks.find(x=>x.id===id);x.qty=Math.max(0,x.qty+n);save()}
+
+function addShopping(){if(!shopName.value.trim())return;db.shopping.push({id:gid(),name:shopName.value.trim(),cat:shopCat.value,done:false});addTimeline("Zakupy","Dodano: "+shopName.value.trim());shopName.value="";save()}
+function renderShopping(){shopList.innerHTML=db.shopping.map(x=>`<div class="item"><b>${x.done?"✓ ":""}${esc(x.name)}</b><div>${esc(x.cat)}</div><div class="actions"><button onclick="toggle('shopping','${x.id}')">${x.done?"COFNIJ":"KUPIONE"}</button><button class="red" onclick="del('shopping','${x.id}')">USUŃ</button></div></div>`).join("")}
+
+function addTrip(){if(!tripName.value.trim())return;db.trips.push({id:gid(),name:tripName.value.trim(),date:tripDate.value,details:tripDetails.value});addTimeline("Podróż","Dodano: "+tripName.value.trim(),tripDate.value||new Date().toISOString());tripName.value=tripDetails.value="";save()}
+function addPack(){if(!packName.value.trim())return;db.packing.push({id:gid(),name:packName.value.trim(),done:false});packName.value="";save()}
+function renderTrips(){tripList.innerHTML=db.trips.map(x=>`<div class="item"><b>${esc(x.name)} • ${fmt(x.date)}</b><div>${esc(x.details)}</div><button class="red" onclick="del('trips','${x.id}')">USUŃ</button></div>`).join("");packList.innerHTML=db.packing.map(x=>`<div class="item"><b>${x.done?"✓ ":""}${esc(x.name)}</b><div class="actions"><button onclick="toggle('packing','${x.id}')">${x.done?"COFNIJ":"SPAKOWANE"}</button><button class="red" onclick="del('packing','${x.id}')">USUŃ</button></div></div>`).join("")}
+
+function addRental(){if(!rentProperty.value.trim())return;db.rentals.push({id:gid(),property:rentProperty.value.trim(),tenant:rentTenant.value,amount:+rentAmount.value||0,due:rentDue.value,notes:rentNotes.value});addTimeline("Najem","Dodano wpis: "+rentProperty.value.trim(),rentDue.value||new Date().toISOString());rentProperty.value=rentTenant.value=rentNotes.value="";save()}
+function renderRentals(){rentList.innerHTML=db.rentals.map(x=>`<div class="item"><b>${esc(x.property)}</b><div>Najemca: ${esc(x.tenant)} • ${x.amount} zł • termin: ${fmt(x.due)}</div><div>${esc(x.notes)}</div><button class="red" onclick="del('rentals','${x.id}')">USUŃ</button></div>`).join("")}
+
+function addDocument(){let f=docFile.files[0],name=docName.value.trim();if(!f||!name)return alert("Wybierz plik i wpisz nazwę.");if(f.size>2_500_000)return alert("Plik jest za duży. Wybierz plik do 2,5 MB.");let r=new FileReader();r.onload=()=>{db.documents.push({id:gid(),name,cat:docCat.value,file:r.result,type:f.type,date:new Date().toISOString()});addTimeline("Dokument","Dodano: "+name);docName.value="";docFile.value="";save()};r.readAsDataURL(f)}
+function renderDocs(){docList.innerHTML=db.documents.map(x=>`<div class="item"><b>${esc(x.name)}</b><div>${esc(x.cat)} • ${fmt(x.date)}</div><div class="actions"><a href="${x.file}" target="_blank"><button>OTWÓRZ</button></a><button class="red" onclick="del('documents','${x.id}')">USUŃ</button></div></div>`).join("")}
+
+function calendarMove(n){calendarDate.setMonth(calendarDate.getMonth()+n);renderCalendar()}
+function allEvents(){return [...db.tasks.map(x=>({date:x.date,text:x.text})),...db.trips.map(x=>({date:x.date,text:"Podróż: "+x.name})),...db.rentals.map(x=>({date:x.due,text:"Najem: "+x.property})),...db.reminders.map(x=>({date:(x.date||"").slice(0,10),text:x.text}))].filter(x=>x.date)}
+function renderCalendar(){let y=calendarDate.getFullYear(),m=calendarDate.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate(),events=allEvents();calendarTitle.textContent=calendarDate.toLocaleDateString("pl-PL",{month:"long",year:"numeric"});let h=["Pn","Wt","Śr","Cz","Pt","Sb","Nd"].map(x=>`<div class="daycell"><b>${x}</b></div>`).join("");for(let i=0;i<offset;i++)h+='<div class="daycell"></div>';for(let d=1;d<=days;d++){let key=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,es=events.filter(x=>x.date===key);h+=`<div class="daycell"><b>${d}</b>${es.slice(0,2).map(e=>`<div><span class="dot"></span>${esc(e.text).slice(0,18)}</div>`).join("")}</div>`}calendarGrid.innerHTML=h}
+
+function renderStats(){let wh=Object.values(db.work).reduce((s,w)=>s+calcHours(w),0),items=[["Zadania",db.tasks.length],["Wykonane zadania",db.tasks.filter(x=>x.done).length],["Godziny pracy",minutesText(wh)],["Operacje finansowe",db.finances.length],["Leki",db.meds.length],["Podróże",db.trips.length],["Dokumenty",db.documents.length],["Produkty w magazynie",db.stocks.length]];statsGrid.innerHTML=items.map(x=>`<div class="metric"><span>${x[0].toUpperCase()}</span><b>${x[1]}</b></div>`).join("")}
+function renderTimeline(){timelineList.innerHTML=db.timeline.map(x=>`<div class="item"><b>${esc(x.type)}</b><div>${esc(x.text)}</div><div class="small">${new Date(x.date).toLocaleString("pl-PL")}</div></div>`).join("")||'<div class="item">Brak zdarzeń.</div>'}
+function renderAchievements(){let a=[["Pierwsze zadanie",db.tasks.length>=1],["10 wykonanych zadań",db.tasks.filter(x=>x.done).length>=10],["Pierwszy tydzień pracy",Object.keys(db.work).length>=5],["Pierwszy dokument",db.documents.length>=1],["Pierwsza podróż",db.trips.length>=1],["Cel 10%",(db.goal.current||0)/(db.goal.target||1)>=.1]];achievementList.innerHTML=a.map(x=>`<div class="item"><b>${x[1]?"🏆":"🔒"} ${x[0]}</b></div>`).join("")}
+
+function updateSettings(){db.settings={theme:theme.value,fontSize:fontSize.value,fontWeight:fontWeight.value,oneHand:oneHand.checked,compact:compact.checked,weekStart:db.settings.weekStart||"sunday",
+defaultWorkIn:db.settings.defaultWorkIn||"14:00",
+defaultWorkOut:db.settings.defaultWorkOut||"02:00",
+defaultWorkBreak:db.settings.defaultWorkBreak??30,
+securityEnabled:db.settings.securityEnabled||false,
+pinHash:db.settings.pinHash||"",
+faceCredentialId:db.settings.faceCredentialId||"",
+autoLockMinutes:db.settings.autoLockMinutes??5};save()}
+function updateWeekStart(){db.settings.weekStart=weekStartSetting.value;weekStart=startWeek(new Date());save()}
+function applySettings(){let s=db.settings;document.documentElement.dataset.theme=s.theme;document.documentElement.style.setProperty("--font",s.fontSize+"px");document.documentElement.style.setProperty("--weight",s.fontWeight);document.body.classList.toggle("onehand",!!s.oneHand);document.body.classList.toggle("compact",!!s.compact);theme.value=s.theme;fontSize.value=s.fontSize;fontWeight.value=s.fontWeight;oneHand.checked=!!s.oneHand;compact.checked=!!s.compact;if(document.getElementById("weekStartSetting"))weekStartSetting.value=s.weekStart||"sunday"}
+
+function smartHome(){let td=today(),tasks=db.tasks.filter(x=>x.date===td),done=tasks.filter(x=>x.done).length,p=tasks.length?Math.round(done/tasks.length*100):0;dayProgress.textContent=p+"%";dayBar.style.width=p+"%";todayTasks.textContent=tasks.length;let upcoming=db.reminders.filter(x=>!x.done&&new Date(x.date)>=new Date()).length;reminderCount.textContent=upcoming;let hints=[];db.stocks.filter(x=>x.qty<=x.min).slice(0,2).forEach(x=>hints.push("Kończy się zapas: "+x.name));db.bills.filter(x=>!x.paid&&x.day<=new Date().getDate()+2).slice(0,2).forEach(x=>hints.push("Zbliża się opłata: "+x.name));db.reminders.filter(x=>!x.done&&new Date(x.date)-new Date()<172800000&&new Date(x.date)>=new Date()).slice(0,2).forEach(x=>hints.push("Wkrótce: "+x.text));smartHints.innerHTML=hints.map(x=>`<div class="item">${esc(x)}</div>`).join("")||'<div class="item">Brak pilnych komunikatów.</div>'}
+function runSearch(){let q=globalSearch.value.trim().toLowerCase();if(!q)return;let groups={Planer:db.tasks,Finanse:db.finances,Leki:db.meds,Dom:db.homeTasks,Podróże:db.trips,Najem:db.rentals,Dokumenty:db.documents,Magazyn:db.stocks,Zakupy:db.shopping,Przypomnienia:db.reminders},out=[];for(let [g,a] of Object.entries(groups))for(let x of a)if(JSON.stringify(x).toLowerCase().includes(q))out.push(`<div class="item"><b>${g}</b><div>${esc(x.text||x.name||x.property||"Wpis")}</div></div>`);results.innerHTML=out.join("")||'<div class="item">Nie znaleziono wyników.</div>';openScreen("searchResults")}
+function exportData(){let b=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="AdamOS_kopia_"+today()+".json";a.click()}
+function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{db=Object.assign(clone(defaults),JSON.parse(r.result));save();alert("Kopia została wczytana.")}catch{alert("Nieprawidłowy plik.")}};r.readAsText(f)}
+function exportCalendar(){let l=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//AdamOS//PL"];allEvents().forEach((x,i)=>l.push("BEGIN:VEVENT",`UID:${i}-${Date.now()}@adamos`,`DTSTART;VALUE=DATE:${x.date.replaceAll("-","")}`,`SUMMARY:${x.text.replace(/\n/g," ")}`,"END:VEVENT"));l.push("END:VCALENDAR");let b=new Blob([l.join("\r\n")],{type:"text/calendar"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="AdamOS_kalendarz.ics";a.click()}
+
+function versionParts(v){return String(v).split(".").map(n=>parseInt(n,10)||0)}
+function isNewerVersion(a,b){let x=versionParts(a),y=versionParts(b),n=Math.max(x.length,y.length);for(let i=0;i<n;i++){if((x[i]||0)>(y[i]||0))return true;if((x[i]||0)<(y[i]||0))return false}return false}
+function showChangelog(manual=false){
+ const seen=localStorage.getItem(VERSION_SEEN_KEY);
+ if(!manual&&seen===APP_VERSION)return;
+ versionTitle.textContent=`AdamOS ${APP_VERSION}`;
+ versionIntro.innerHTML=`Używasz wersji <b>${APP_VERSION}</b>. Twoje dane zapisane w AdamOS pozostają na tym urządzeniu.`;
+ const entries=CHANGELOG[APP_VERSION]||["Wprowadzono poprawki i ulepszenia."];
+ changelogList.innerHTML=entries.map(x=>`<li>${esc(x)}</li>`).join("");
+ versionModal.classList.remove("hidden");
+}
+function closeVersionModal(){localStorage.setItem(VERSION_SEEN_KEY,APP_VERSION);versionModal.classList.add("hidden")}
+async function checkForUpdates(manual=false){
+ const status=document.getElementById("updateStatus");
+ if(status)status.textContent="Sprawdzam najnowszą wersję...";
+ try{
+  const base=location.href.split("?")[0].split("#")[0];
+  const r=await fetch(base+"?sprawdz="+Date.now(),{cache:"no-store"});
+  const text=await r.text();
+  const m=text.match(/<meta name="adamos-version" content="([^"]+)"/i);
+  const remote=m?m[1]:null;
+  if(!remote)throw new Error("Brak numeru wersji");
+  if(isNewerVersion(remote,APP_VERSION)){
+   if(status)status.innerHTML=`Dostępna jest wersja <b>${esc(remote)}</b>.`;
+   if(confirm(`Dostępna jest nowa wersja AdamOS ${remote}. Odświeżyć aplikację teraz?`))location.replace(base+"?wersja="+Date.now());
+  }else{
+   if(status)status.textContent=`Masz najnowszą wersję ${APP_VERSION}.`;
+   if(manual)alert(`Masz najnowszą wersję AdamOS ${APP_VERSION}.`);
+  }
+ }catch(e){
+  if(status)status.textContent="Nie udało się sprawdzić aktualizacji. Sprawdź połączenie z internetem.";
+  if(manual)alert("Nie udało się sprawdzić aktualizacji. Spróbuj ponownie później.");
+ }
+}
+
+
+function renderVersionHistory(){
+ const el=document.getElementById("versionHistory");if(!el)return;
+ el.innerHTML=Object.entries(CHANGELOG).map(([v,items],i)=>`<div class="item history-entry"><b>Wersja ${esc(v)}</b><div class="small">${i===0?RELEASE_DATE:"Wcześniejsze wydanie"}${i===0?" • kompilacja "+BUILD_NUMBER:""}</div><ul class="changelog">${items.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`).join("");
+}
+function clearAll(){if(confirm("Czy na pewno usunąć wszystkie dane?")){db=clone(defaults);save()}}
+
+const SECURITY_SALT="AdamOS-local-security-v1";
+let enteredPin="",pinSetupMode=false,pinSetupFirst="",lastActivity=Date.now(),autoLockTimer=null,faceAutoInProgress=false,lastFaceAutoAttempt=0;
+
+async function hashPin(pin){
+ const data=new TextEncoder().encode(SECURITY_SALT+"|"+pin);
+ const digest=await crypto.subtle.digest("SHA-256",data);
+ return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("")
+}
+function renderPinDots(){
+ const box=document.getElementById("pinDots");if(!box)return;
+ box.innerHTML=Array.from({length:4},(_,i)=>`<span class="pin-dot ${i<enteredPin.length?"on":""}"></span>`).join("")
+}
+function showLock(message=""){
+ enteredPin="";renderPinDots();
+ lockMessage.textContent=message;
+ lockTitle.textContent=pinSetupMode?(pinSetupFirst?"Powtórz 4-cyfrowy PIN":"Ustaw nowy 4-cyfrowy PIN"):"Wpisz 4-cyfrowy PIN";
+ lockScreen.classList.remove("hidden");
+ faceUnlockBtn.classList.toggle("hidden",!db.settings.faceCredentialId||pinSetupMode);
+ document.body.style.overflow="hidden";
+ if(db.settings.faceCredentialId&&!pinSetupMode){
+  setTimeout(()=>autoUnlockWithFaceID(),350);
+ }
+}
+function hideLock(){
+ pinSetupMode=false;pinSetupFirst="";enteredPin="";
+ lockScreen.classList.add("hidden");document.body.style.overflow="";
+ lastActivity=Date.now();scheduleAutoLock()
+}
+function pinKey(k){
+ if(enteredPin.length>=4)return;
+ enteredPin+=k;renderPinDots();
+ if(enteredPin.length===4)submitPin()
+}
+function clearPin(){enteredPin="";lockMessage.textContent="";renderPinDots()}
+function backPin(){enteredPin=enteredPin.slice(0,-1);renderPinDots()}
+async function submitPin(){
+ const current=enteredPin;enteredPin="";renderPinDots();
+ if(pinSetupMode){
+  if(!pinSetupFirst){pinSetupFirst=current;lockMessage.textContent="Wpisz ten sam PIN ponownie.";lockTitle.textContent="Powtórz 4-cyfrowy PIN";return}
+  if(current!==pinSetupFirst){pinSetupFirst="";lockMessage.textContent="PIN-y nie są identyczne. Zacznij ponownie.";lockTitle.textContent="Ustaw nowy 4-cyfrowy PIN";return}
+  db.settings.pinHash=await hashPin(current);db.settings.securityEnabled=true;
+  localStorage.setItem(KEY,JSON.stringify(db));hideLock();refreshSecurityUI();alert("PIN został zapisany.")
+  return
+ }
+ const h=await hashPin(current);
+ if(h===db.settings.pinHash){hideLock()}else{lockMessage.textContent="Nieprawidłowy PIN. Spróbuj ponownie."}
+}
+function startPinSetup(){
+ pinSetupMode=true;pinSetupFirst="";showLock()
+}
+function lockNow(){
+ if(!db.settings.securityEnabled)return alert("Najpierw ustaw PIN w Centrum systemu.");
+ pinSetupMode=false;showLock()
+}
+function disableSecurity(){
+ if(!confirm("Czy wyłączyć PIN i Face ID?"))return;
+ db.settings.securityEnabled=false;db.settings.pinHash="";db.settings.faceCredentialId="";
+ localStorage.setItem(KEY,JSON.stringify(db));refreshSecurityUI();alert("Blokada została wyłączona.")
+}
+function saveSecuritySettings(){
+ db.settings.autoLockMinutes=+autoLockMinutes.value||0;
+ localStorage.setItem(KEY,JSON.stringify(db));scheduleAutoLock()
+}
+function scheduleAutoLock(){
+ clearTimeout(autoLockTimer);
+ const mins=+db.settings.autoLockMinutes||0;
+ if(!db.settings.securityEnabled||mins<=0||!lockScreen.classList.contains("hidden"))return;
+ autoLockTimer=setTimeout(()=>showLock("AdamOS został automatycznie zablokowany."),mins*60000)
+}
+function registerActivity(){
+ if(lockScreen&&!lockScreen.classList.contains("hidden"))return;
+ lastActivity=Date.now();scheduleAutoLock()
+}
+["click","touchstart","keydown","scroll"].forEach(e=>document.addEventListener(e,registerActivity,{passive:true}));
+
+function bytesToBase64url(bytes){
+ return btoa(String.fromCharCode(...bytes)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")
+}
+function base64urlToBytes(s){
+ s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";
+ return Uint8Array.from(atob(s),c=>c.charCodeAt(0))
+}
+async function setupFaceID(){
+ if(!window.PublicKeyCredential||!navigator.credentials)return alert("Face ID nie jest obsługiwane w tej przeglądarce. PIN nadal działa.");
+ if(!db.settings.pinHash)return alert("Najpierw ustaw PIN.");
+ try{
+  const challenge=crypto.getRandomValues(new Uint8Array(32));
+  const userId=crypto.getRandomValues(new Uint8Array(16));
+  const cred=await navigator.credentials.create({publicKey:{
+   challenge,
+   rp:{name:"AdamOS",id:location.hostname},
+   user:{id:userId,name:"AdamOS użytkownik",displayName:"AdamOS"},
+   pubKeyCredParams:[{type:"public-key",alg:-7},{type:"public-key",alg:-257}],
+   authenticatorSelection:{authenticatorAttachment:"platform",userVerification:"required",residentKey:"preferred"},
+   timeout:60000,attestation:"none"
+  }});
+  db.settings.faceCredentialId=bytesToBase64url(new Uint8Array(cred.rawId));
+  db.settings.securityEnabled=true;localStorage.setItem(KEY,JSON.stringify(db));
+  refreshSecurityUI();alert("Face ID zostało włączone.")
+ }catch(e){alert("Nie udało się włączyć Face ID. Możesz nadal korzystać z PIN-u.")}
+}
+async function autoUnlockWithFaceID(){
+ if(faceAutoInProgress||pinSetupMode||!db.settings.faceCredentialId)return;
+ const now=Date.now();
+ if(now-lastFaceAutoAttempt<2500)return;
+ lastFaceAutoAttempt=now;
+ faceAutoInProgress=true;
+ lockMessage.textContent="Uruchamiam Face ID…";
+ try{
+  const id=base64urlToBytes(db.settings.faceCredentialId);
+  await navigator.credentials.get({publicKey:{
+   challenge:crypto.getRandomValues(new Uint8Array(32)),
+   allowCredentials:[{id,type:"public-key",transports:["internal"]}],
+   userVerification:"required",timeout:60000
+  }});
+  hideLock()
+ }catch(e){
+  lockMessage.textContent="Face ID nie uruchomiło się automatycznie. Użyj PIN-u lub przycisku Face ID.";
+ }finally{
+  faceAutoInProgress=false;
+ }
+}
+async function unlockWithFaceID(){
+ try{
+  const id=base64urlToBytes(db.settings.faceCredentialId);
+  await navigator.credentials.get({publicKey:{
+   challenge:crypto.getRandomValues(new Uint8Array(32)),
+   allowCredentials:[{id,type:"public-key",transports:["internal"]}],
+   userVerification:"required",timeout:60000
+  }});
+  hideLock()
+ }catch(e){lockMessage.textContent="Face ID nie odblokowało aplikacji. Użyj PIN-u."}
+}
+function refreshSecurityUI(){
+ if(!document.getElementById("securityStatus"))return;
+ const on=!!db.settings.securityEnabled;
+ securityStatus.textContent=on?(db.settings.faceCredentialId?"Blokada PIN i Face ID włączona":"Blokada PIN włączona"):"Blokada wyłączona";
+ securityDot.classList.toggle("on",on);
+ autoLockMinutes.value=String(db.settings.autoLockMinutes??5);
+ faceSetupBtn.textContent=db.settings.faceCredentialId?"ZMIEŃ FACE ID":"WŁĄCZ FACE ID"
+}
+function initializeSecurity(){
+ db.settings=db.settings||{};
+ if(db.settings.securityEnabled===undefined)db.settings.securityEnabled=false;
+ if(db.settings.pinHash===undefined)db.settings.pinHash="";
+ if(db.settings.faceCredentialId===undefined)db.settings.faceCredentialId="";
+ if(db.settings.autoLockMinutes===undefined)db.settings.autoLockMinutes=5;
+ refreshSecurityUI();
+ if(db.settings.securityEnabled&&db.settings.pinHash)showLock();
+ else scheduleAutoLock()
+}
+
+function refreshAll(){refreshSecurityUI();if(document.getElementById("headerVersion"))headerVersion.textContent=APP_VERSION;if(document.getElementById("settingsVersion"))settingsVersion.textContent=APP_VERSION;if(document.getElementById("homeVersion"))homeVersion.textContent=APP_VERSION;renderVersionHistory();todayDate.textContent=new Date().toLocaleDateString("pl-PL",{weekday:"long",day:"numeric",month:"long",year:"numeric"});if(!planDate.value)planDate.value=today();renderTasks();renderWork();renderReminders();renderFinance();renderMeds();renderHome();renderStocks();renderShopping();renderTrips();renderRentals();renderDocs();renderCalendar();renderStats();renderTimeline();renderAchievements();smartHome();applySettings()}
+planDate.addEventListener("change",renderTasks);rate.addEventListener("input",renderWork);pension.addEventListener("input",renderWork);
+async function bootAdamOS(){
+ try{
+  refreshAll();
+  initializeSecurity();
+  await new Promise(r=>setTimeout(r,850));
+  document.getElementById("appShell")?.classList.add("ready");
+  const homeScreen=document.getElementById("home");
+  if(homeScreen){homeScreen.classList.add("active");homeScreen.style.display="block";homeScreen.style.opacity="1"}
+  document.getElementById("splashScreen")?.classList.add("hide");
+  setTimeout(()=>showChangelog(false),700);
+  setTimeout(()=>checkForUpdates(false),2200);
+ }catch(error){
+  console.error("AdamOS boot error",error);
+  document.getElementById("splashScreen")?.classList.add("hide");
+  const fatal=document.getElementById("fatalError");
+  const text=document.getElementById("fatalText");
+  if(text)text.textContent="Błąd: "+(error?.message||"nieznany błąd")+". Twoje dane nie zostały usunięte.";
+  fatal?.classList.remove("hidden");
+ }
+}
+window.addEventListener("error",event=>{
+ console.error(event.error||event.message);
+});
+bootAdamOS();
+</script>
+</body>
+</html>
