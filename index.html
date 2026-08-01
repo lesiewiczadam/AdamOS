@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#071426" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="AdamOS" />
+  <title>AdamOS</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #06111f;
+      --bg-soft: #0b1a2e;
+      --panel: rgba(15, 31, 52, 0.94);
+      --panel-light: rgba(22, 42, 68, 0.98);
+      --text: #f4f7fb;
+      --muted: #9fb0c7;
+      --blue: #3a8cff;
+      --blue-glow: rgba(58, 140, 255, 0.28);
+      --silver: rgba(214, 223, 235, 0.32);
+      --red: #ff4d5e;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background:
+        radial-gradient(circle at top, rgba(58, 140, 255, 0.18), transparent 34%),
+        linear-gradient(180deg, #08172a 0%, var(--bg) 55%, #030a13 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100dvh;
+    }
+
+    .app {
+      min-height: 100dvh;
+      padding:
+        max(22px, env(safe-area-inset-top))
+        20px
+        max(24px, env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      min-height: 54px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 16px var(--blue);
+    }
+
+    .hero {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 34px 0;
+    }
+
+    .hero-card {
+      width: min(100%, 520px);
+      padding: 38px 24px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(17, 35, 58, 0.78), rgba(8, 20, 36, 0.72));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.34);
+      backdrop-filter: blur(18px);
+    }
+
+    .logo {
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 22px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(145deg, #246edb, #5ea1ff);
+      box-shadow: 0 0 34px var(--blue-glow);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 9vw, 54px);
+      letter-spacing: -1.5px;
+    }
+
+    .subtitle {
+      margin: 14px auto 0;
+      max-width: 360px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: center;
+      padding-top: 18px;
+    }
+
+    .version-button {
+      border: 0;
+      background: transparent;
+      color: rgba(159, 176, 199, 0.82);
+      font: inherit;
+      font-size: 14px;
+      letter-spacing: 0.2px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .version-button:active {
+      transform: scale(0.97);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      padding: 22px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(1, 6, 13, 0.72);
+      backdrop-filter: blur(12px);
+      z-index: 20;
+    }
+
+    .overlay.open {
+      display: flex;
+    }
+
+    .dialog {
+      width: min(100%, 430px);
+      border-radius: 26px;
+      padding: 28px;
+      background: linear-gradient(180deg, var(--panel-light), var(--panel));
+      border: 1px solid var(--silver);
+      box-shadow:
+        0 0 34px var(--blue-glow),
+        0 24px 80px rgba(0,0,0,0.48);
+    }
+
+    .dialog-kicker {
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .dialog h2 {
+      margin: 0;
+      font-size: 29px;
+      letter-spacing: -0.7px;
+    }
+
+    .dialog p {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .changes {
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 13px;
+    }
+
+    .changes li {
+      padding: 15px 16px;
+      border-radius: 17px;
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(255,255,255,0.06);
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .close-button {
+      width: 100%;
+      margin-top: 24px;
+      min-height: 50px;
+      border: 0;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #4a96ff, #2676e9);
+      color: white;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(38, 118, 233, 0.28);
+    }
+
+    .close-button:active {
+      transform: scale(0.985);
+    }
+
+    @media (min-width: 700px) {
+      .app {
+        padding-left: 34px;
+        padding-right: 34px;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .dialog {
+        animation: dialogIn 180ms ease-out;
+      }
+
+      @keyframes dialogIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="status-dot" aria-label="System aktywny"></div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-card">
+        <div class="logo" aria-hidden="true">A</div>
+        <h1>Witaj w AdamOS</h1>
+        <p class="subtitle">
+          Twój osobisty system zarządzania codziennością.
+        </p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <button class="version-button" id="versionButton" type="button" aria-haspopup="dialog">
+        Version 1.4.0
+      </button>
+    </footer>
+  </main>
+
+  <div class="overlay" id="updateOverlay" role="presentation">
+    <section
+      class="dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="updateTitle"
+      aria-describedby="updateDescription"
+    >
+      <div class="dialog-kicker">Aktualizacja</div>
+      <h2 id="updateTitle">Co nowego w v1.4.0</h2>
+
+      <p id="updateDescription">
+        Najważniejsze zmiany w tej wersji:
+      </p>
+
+      <ul class="changes">
+        <li>Uproszczony i bardziej przejrzysty ekran startowy.</li>
+        <li>Jedna informacja o wersji programu, umieszczona na dole.</li>
+        <li>Nowe, eleganckie okno informacji o aktualizacji.</li>
+      </ul>
+
+      <button class="close-button" id="closeButton" type="button">
+        Gotowe
+      </button>
+    </section>
+  </div>
+
+  <script>
+    const versionButton = document.getElementById("versionButton");
+    const updateOverlay = document.getElementById("updateOverlay");
+    const closeButton = document.getElementById("closeButton");
+
+    function openUpdateDialog() {
+      updateOverlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+      closeButton.focus();
+    }
+
+    function closeUpdateDialog() {
+      updateOverlay.classList.remove("open");
+      document.body.style.overflow = "";
+      versionButton.focus();
+    }
+
+    versionButton.addEventListener("click", openUpdateDialog);
+    closeButton.addEventListener("click", closeUpdateDialog);
+
+    updateOverlay.addEventListener("click", event => {
+      if (event.target === updateOverlay) {
+        closeUpdateDialog();
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && updateOverlay.classList.contains("open")) {
+        closeUpdateDialog();
+      }
+    });
+  </script>
+</body>
+</html>
